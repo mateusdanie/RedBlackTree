@@ -1,17 +1,21 @@
 #ifndef ARN_H
 #define ARN_H
 
-typedef struct no
+typedef struct node
 {
     int key;
     char color;
-    struct no *left;
-    struct no *rigth;
-    struct no *father;
-}No;
+    struct node *left;
+    struct node *rigth;
+    struct node *father;
+}Node;
 
 
-void moveFather(No *pointerU, No *pointerV, No **pointerRoot);
-void insertRN();
+void moveFather(Node *pointerU, Node *pointerV, Node **pointernode);
+void rotationL(Node *pointerZ);
+void rotationR(Node *pointerZ);
+void routeRN(Node *pointerZ,  Node **pointerRoot);
+void insertRN(Node *pointerZ, Node **pointerRoot);
+
 
 #endif
