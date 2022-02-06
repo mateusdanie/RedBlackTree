@@ -4,22 +4,87 @@
 
 int main()
 {
-    
+    Node *externalNode = external();
+    Node *Root = externalNode;
+
+    insertRN(createNode(10), &Root, externalNode);
+    preOrdem(Root);
+
+    printf("\n");
+
+    insertRN(createNode(15), &Root, externalNode);
+    preOrdem(Root);
+
+    printf("\n");
+
+    removeRN(searchNode(Root, 10), &Root, externalNode);
+    preOrdem(Root);
+
+    printf("\n");
+
     return 0;
 }
 
-Node *external(){
-    Node *external = (Node*) malloc(sizeof(Node));
-    external->key = 0;
-    external->color = 'N';
-    external->left = NULL;
-    external->rigth = NULL;
+Node *searchNode(Node *pointerRoot, int key){
+    if(pointerRoot->key == key){
+        Node *new = (Node*) malloc(sizeof(Node));
+        new->key = pointerRoot->key;
+        new->left = pointerRoot->left;
+        new->rigth = pointerRoot->rigth;
+        new->father = pointerRoot->father;
+        return new;
+    }
 
-    return external;
+    if(pointerRoot->left != NULL){
+        searchNode(pointerRoot->left, key);
+    }
+
+    if(pointerRoot->rigth != NULL){
+        searchNode(pointerRoot->rigth, key);
+    }
 }
 
-void moveFather(Node *pointerU, Node *pointerV, Node **pointerRoot){
-    if(pointerU->father->color == 'N' && pointerU->father->left == NULL && pointerU->father->rigth == NULL){
+Node *external(){
+    Node *externalNode = (Node*) malloc(sizeof(Node));
+    externalNode->key = 0;
+    externalNode->color = 'N';
+    externalNode->left = NULL;
+    externalNode->rigth = NULL;
+    externalNode->father = NULL;
+
+    return externalNode;
+}
+
+void preOrdem(Node *pointerRoot){
+    if(pointerRoot->key != 0){
+        printf("Key = %d ", pointerRoot->key);
+    }else{
+        printf("External ");
+    }
+
+    if(pointerRoot->left != NULL){
+        preOrdem(pointerRoot->left);
+    }
+
+    if(pointerRoot->rigth != NULL){
+        preOrdem(pointerRoot->rigth);
+    }
+
+}
+
+Node *createNode(int key){
+    Node *new = (Node*) malloc(sizeof(Node));
+    new->key = key;
+    new->color = 'N';
+    new->left = NULL;
+    new->rigth = NULL;
+    new->father = NULL;
+
+    return new;
+}
+
+void moveFather(Node *pointerU, Node *pointerV, Node **pointerRoot, Node *external){
+    if(pointerU->father == external){
         (*pointerRoot) = pointerV;
     }else{
         if(pointerU == pointerU->father->left){
@@ -173,29 +238,42 @@ void removeRN(Node *pointerZ, Node **pointerRoot, Node *external){
     if (pointerY->left == external){
 
         pointerX = pointerZ->rigth;
-        moveFather(pointerZ, pointerZ->rigth, pointerRoot);
+        moveFather(pointerZ, pointerZ->rigth, pointerRoot, external);
     }else{
         if (pointerY->rigth == external) {
 
             pointerX = pointerZ->left;
-            moveFather(pointerZ, pointerZ->left, pointerRoot);
+            moveFather(pointerZ, pointerZ->left, pointerRoot, external);
         }else{
             pointerY = successor(pointerZ); originalColor = pointerY->color;
             pointerX = pointerY->rigth;
 
             if(pointerY->father != pointerZ){
-                moveFather(pointerY, pointerX, pointerRoot);
+                moveFather(pointerY, pointerX, pointerRoot, external);
                 pointerY->rigth = pointerZ->rigth;
                 pointerY->father->rigth = pointerY;
             }
 
-            moveFather(pointerZ, pointerY, pointerRoot);
+            moveFather(pointerZ, pointerY, pointerRoot, external);
             pointerY->left = pointerZ->left;
             pointerY->left->father = pointerY;
         }
 
         if(originalColor == 'N'){
-            routeRemoveRN(pointerX, pointerRoot);
+            routeRN(pointerX, pointerRoot, external);
         }
+    }
+}
+
+int countNodes(Node *pointerRoot, int *count){
+
+    (*count)++;
+
+    if(pointerRoot->left != external){
+        countNodes(pointerRoot->left, count);
+    }
+
+    if(pointerRoot->rigth != external){
+        countNodes(pointerRoot->rigth, count);
     }
 }
