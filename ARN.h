@@ -21,7 +21,8 @@ void routeRN(Node *pointerZ, Node **pointerRoot, Node *external);
 void insertRN(Node *pointerZ, Node **pointerRoot, Node *external);
 Node *successor(Node *pointerZ);
 void removeRN(Node *pointerZ, Node **pointerRoot, Node *external);
-int countNodes(Node *pointerRoot, int *count);
-
+void checkRN(Node *pointerRoot, int *he, int *hd);
+void countNodes(Node *pointerRoot, int *count, Node *externalNode);
+void freeRN(Node *pointerRoot);
 
 #endif

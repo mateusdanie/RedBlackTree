@@ -6,6 +6,7 @@ int main()
 {
     Node *externalNode = external();
     Node *Root = externalNode;
+    int count = 0, he = 0, hd = 0;
 
     insertRN(createNode(10), &Root, externalNode);
     preOrdem(Root);
@@ -17,11 +18,17 @@ int main()
 
     printf("\n");
 
-    removeRN(searchNode(Root, 10), &Root, externalNode);
-    preOrdem(Root);
+    // removeRN(searchNode(Root, 10), &Root, externalNode);
+    // preOrdem(Root);
+    // printf("\n");
 
-    printf("\n");
-
+    checkRN(Root, &he, &hd);
+    if(he == hd){
+        printf("Eh rubro negra!!!\n");
+    }else{
+        printf("Nao eh rubro negra!!!\n");
+    }
+    
     return 0;
 }
 
@@ -265,15 +272,45 @@ void removeRN(Node *pointerZ, Node **pointerRoot, Node *external){
     }
 }
 
-int countNodes(Node *pointerRoot, int *count){
+void checkRN(Node *pointerRoot, int *he, int *hd){
+
+    if(pointerRoot->left != NULL){
+        if(pointerRoot->color == 'N' && pointerRoot->key != 0){
+            (*he)++;
+        } 
+        checkRN(pointerRoot->left, he, hd);
+    }
+
+    if(pointerRoot->rigth != NULL){
+        if(pointerRoot->color == 'N' && pointerRoot->key != 0){
+            (*hd)++;
+        } 
+        checkRN(pointerRoot->rigth, he, hd);
+    }
+
+}
+
+void countNodes(Node *pointerRoot, int *count, Node *externalNode){
 
     (*count)++;
 
-    if(pointerRoot->left != external){
-        countNodes(pointerRoot->left, count);
+    if(pointerRoot->left != externalNode){
+        countNodes(pointerRoot->left, count, externalNode);
     }
 
-    if(pointerRoot->rigth != external){
-        countNodes(pointerRoot->rigth, count);
+    if(pointerRoot->rigth != externalNode){
+        countNodes(pointerRoot->rigth, count, externalNode);
     }
+}
+
+void freeRN(Node *pointerRoot){
+    if(pointerRoot->left != NULL){
+        freeRN(pointerRoot->left);
+    }
+
+    if(pointerRoot->rigth != NULL){
+        freeRN(pointerRoot->rigth);
+    } 
+
+    free(pointerRoot);
 }
