@@ -219,7 +219,7 @@ Node *successor(Node *pointerZ){
     return pointerZ->father;
 }
 
-removeRouteRN(Node *pointerX, Node **pointerRoot, Node *external){
+void removeRouteRN(Node *pointerX, Node **pointerRoot, Node *external){
     while(pointerX != (*pointerRoot) && pointerX->color != 'R'){
         if(pointerX == pointerX->father->left){
             Node *pointerW;
