@@ -10,7 +10,7 @@ typedef struct node
     struct node *father;
 }Node;
 
-Node *searchNode(Node *pointerRoot, int key){
+Node *searchNode(Node *pointerRoot, int key, Node *external){
     if(pointerRoot->key == key){
         Node *new = (Node*) malloc(sizeof(Node));
         new->key = pointerRoot->key;
@@ -20,13 +20,14 @@ Node *searchNode(Node *pointerRoot, int key){
         return new;
     }
 
-    if(pointerRoot->left != NULL){
-        searchNode(pointerRoot->left, key);
+    if(pointerRoot->left != external){
+        searchNode(pointerRoot->left, key, external);
     }
 
-    if(pointerRoot->rigth != NULL){
-        searchNode(pointerRoot->rigth, key);
+    if(pointerRoot->rigth != external){
+        searchNode(pointerRoot->rigth, key, external);
     }
+
 }
 
 Node *external(){
@@ -83,133 +84,121 @@ void moveFather(Node *pointerU, Node *pointerV, Node **pointerRoot, Node *extern
 }
 
 void rotationL(Node *pointerZ, Node **pointerRoot, Node *external){
-    Node *pointerY;
-    pointerY = pointerZ->rigth;
+    Node *pointerK = pointerZ->rigth;
 
-    if(pointerZ->rigth != external){
+    pointerZ->rigth = pointerK->left;
+    if (pointerZ->rigth != external)
+    {
         pointerZ->rigth->father = pointerZ;
     }
 
-    pointerY->father = pointerZ->father;
+    pointerK->father = pointerZ->father;
 
-    if(pointerZ->father == external){
-        (*pointerRoot) = pointerY;
-    }else if(pointerZ == pointerZ->father->left){
-        pointerZ->father->left = pointerY;
-    }else{
-        pointerZ->father->rigth = pointerY;
-    }
+    if (pointerZ->father == external)
+        *pointerRoot = pointerK;
+    else if (pointerZ == pointerZ->father->left)
+        pointerZ->father->left = pointerK;
+    else
+        pointerZ->father->rigth = pointerK;
 
-    pointerY->left = pointerZ;
-    pointerZ->father = pointerY;
+    pointerK->left = pointerZ;
+    pointerZ->father = pointerK;
 }
 
 void rotationR(Node *pointerZ, Node **pointerRoot, Node *external){
-    Node *pointerY;
-    pointerY = pointerZ->left;
-    
-    if(pointerZ->left != external){
+    Node *pointerK = pointerZ->left;
+    pointerZ->left = pointerK->rigth;
+    if (pointerZ->left != external){
         pointerZ->left->father = pointerZ;
     }
 
-    pointerY->father = pointerZ->father;
+    pointerK->father = pointerZ->father;
 
-    if(pointerZ->father == external){
-        (*pointerRoot) = pointerY;
-    }else if(pointerZ == pointerZ->father->left){
-        pointerZ->father->left = pointerY;
-    }else{
-        pointerZ->father->rigth = pointerY;
-    }
+    if (pointerZ->father == external) 
+        *pointerRoot = pointerK;
+    else if (pointerZ == pointerZ->father->left)
+        pointerZ->father->left = pointerK;
+    else
+        pointerZ->father->rigth = pointerK;
 
-    pointerY->rigth = pointerZ;
-    pointerZ->father = pointerY;
+    pointerK->rigth = pointerZ;
+    pointerZ->father = pointerK;
 }
 
 void routeRN(Node *pointerZ, Node **pointerRoot, Node *external){
-    while(pointerZ->father->color == 'R'){
-        if(pointerZ->father == pointerZ->father->father->left){
-            Node *pointerY;
-            pointerY = pointerZ->father->father->rigth;
-
-            if(pointerY->color == 'R'){
-                pointerY->color = 'N';
-                pointerZ->father->color = 'N';
+    while (pointerZ->father->color == 'R') {
+        if (pointerZ->father == pointerZ->father->father->left){
+            Node *pointerY = pointerZ->father->father->rigth;
+            if (pointerY->color == 'R'){
+                pointerZ->father->color = pointerY->color = 'N';
                 pointerZ->father->father->color = 'R';
                 pointerZ = pointerZ->father->father;
-            }else{
-                if(pointerZ == pointerZ->father->rigth){
-                    pointerZ = pointerZ->father;
-                    rotationL(pointerZ, pointerRoot, external);
+            }
+            else{
+                if (pointerZ == pointerZ->father->rigth){
+                pointerZ = pointerZ->father;
+                rotationL(pointerZ, pointerRoot, external);
                 }
-
                 pointerZ->father->color = 'N';
                 pointerZ->father->father->color = 'R';
                 rotationR(pointerZ->father->father, pointerRoot, external);
             }
-
-        }else{
-           Node *pointerY;
-           pointerY = pointerZ->father->father->left;
-           if(pointerY->color == 'R'){
-                pointerY->color = 'N';
-                pointerZ->father->color = 'N';
+        }
+        else{
+            Node *pointerY = pointerZ->father->father->left;
+            if (pointerY->color == 'R'){
+                pointerZ->father->color = pointerY->color = 'N';
                 pointerZ->father->father->color = 'R';
-                pointerZ = pointerZ->father->father; 
-           }else{
-                if(pointerZ == pointerZ->father->left){
-                    pointerZ = pointerZ->father;
-                    rotationR(pointerZ, pointerRoot, external);
+                pointerZ = pointerZ->father->father;
+            }
+            else{
+                if (pointerZ == pointerZ->father->left){
+                pointerZ = pointerZ->father;
+                rotationR(pointerZ, pointerRoot, external);
                 }
-
                 pointerZ->father->color = 'N';
                 pointerZ->father->father->color = 'R';
                 rotationL(pointerZ->father->father, pointerRoot, external);
-           }
-        } 
+            }
+        }
     }
-
     (*pointerRoot)->color = 'N';
 }
 
 void insertRN(Node *pointerZ, Node **pointerRoot, Node *external){
    
-    Node *pointerY;
-    pointerY = external;
-    Node *pointer;
-    pointer = (*pointerRoot);
+    Node *pointer = (*pointerRoot);
+    Node *pointerY = external;
 
-    while(pointer != external){
+    while (pointer != external){
         pointerY = pointer;
-
-        if(pointerZ->key == pointer->key){
-            printf("Chave já existe!!!\n");
+        if (pointerZ->key == pointer->key){
+            printf("Chave ja existe\n");
             pointerY = NULL;
             pointer = external;
-        }else{
-            if(pointerZ->key < pointer->key){
-                pointer = pointer->left;
-            }else{
-                pointer = pointer->rigth;
-            }
+        }
+        else{
+        if (pointerZ->key < pointer->key)
+            pointer = pointer->left;
+        else
+            pointer = pointer->rigth;
         }
     }
 
-    if(pointerY != NULL){
+    if (pointerY != NULL){
         pointerZ->father = pointerY;
-
-        if(pointerY == external){
-            (*pointerRoot) = pointerZ;
-        }else{
-            if(pointerZ->key < pointerY->key){
+        if (pointerY == external){
+            *pointerRoot = pointerZ;
+        }
+        else{
+            if (pointerZ->key < pointerY->key){
                 pointerY->left = pointerZ;
-            }else{
+            }
+            else{
                 pointerY->rigth = pointerZ;
             }
         }
-
-        pointerZ->left = external;
-        pointerZ->rigth = external;
+        pointerZ->left = pointerZ->rigth = external;
         pointerZ->color = 'R';
         routeRN(pointerZ, pointerRoot, external);
     }
@@ -290,29 +279,38 @@ void removeRN(Node *pointerZ, Node **pointerRoot, Node *external){
     if (pointerY->left == external){
 
         pointerX = pointerZ->rigth;
+        printf("movefather 1\n");
         moveFather(pointerZ, pointerZ->rigth, pointerRoot, external);
+        printf("movefather 1\n");
     }else{
         if (pointerY->rigth == external) {
 
             pointerX = pointerZ->left;
+            printf("movefather 2\n");
             moveFather(pointerZ, pointerZ->left, pointerRoot, external);
+            printf("movefather 2\n");
         }else{
             pointerY = successor(pointerX); originalColor = pointerY->color;
             pointerX = pointerY->rigth;
 
             if(pointerY->father != pointerZ){
+                printf("movefather 3\n");
                 moveFather(pointerY, pointerX, pointerRoot, external);
+                printf("movefather 3\n");
                 pointerY->rigth = pointerZ->rigth;
                 pointerY->father->rigth = pointerY;
             }
 
+            printf("movefather 4\n");
             moveFather(pointerZ, pointerY, pointerRoot, external);
+            printf("movefather 4\n");
             pointerY->left = pointerZ->left;
             pointerY->left->father = pointerY;
         }
     }
 
     if(originalColor == 'N'){
+        printf("Rota remover\n");
         removeRouteRN(pointerX, pointerRoot, external);
     }
 }
@@ -348,13 +346,13 @@ void countNodes(Node *pointerRoot, int *count, Node *externalNode){
     }
 }
 
-void freeRN(Node *pointerRoot){
-    if(pointerRoot->left != NULL){
-        freeRN(pointerRoot->left);
+void freeRN(Node *pointerRoot, Node *external){
+    if(pointerRoot->left != external){
+        freeRN(pointerRoot->left,external);
     }
 
-    if(pointerRoot->rigth != NULL){
-        freeRN(pointerRoot->rigth);
+    if(pointerRoot->rigth != external){
+        freeRN(pointerRoot->rigth,external);
     } 
 
     free(pointerRoot);

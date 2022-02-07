@@ -10,55 +10,56 @@ int main()
     srand(time(NULL));
     Node *externalNode = external();
     Node *Root = externalNode;
-    int *arrayADD = malloc(sizeof(Node) * 100);
+    int *arrayADD = malloc(sizeof(Node) * 10000);
 
-    arrayCreate(arrayADD, 100);
+    arrayCreate(arrayADD, 10000);
 
-    int count = 0, he = 0, hd = 0;
+   for (int i = 0; i < 1000; i++)
+   {
+        int count = 0, he = 0, hd = 0;
         
-    for(int i = 0; i < 100; i++)
-    {
-        insertRN(createNode(arrayADD[i]), &Root, externalNode);
-        printf("i = %d\n", i);
-    }
+        for(int j = 0; j <  10000; j++)
+        {
+            insertRN(createNode(arrayADD[j]), &Root, externalNode);
+        }
 
-    countNodes(Root, &count, externalNode);
+        countNodes(Root, &count, externalNode);
 
-    printf("Nos: %d\n", count);
+        printf("Nos: %d\n", count);
 
-        // checkRN(Root, &he, &hd);
+        checkRN(Root, &he, &hd);
 
-        // if(he == hd){
-        //     printf("Eh rubro negra!!!\n");
-        // }else{
-        //     printf("Nao eh rubro negra!!!\n");
-        // }
+        if(he == hd){
+            printf("Eh rubro negra!!!\n");
+        }else{
+            printf("Nao eh rubro negra!!!\n");
+        }
 
-        // for(int k = 0; k < 1000; k++)
-        // {
-        //     removeRN(searchNode(Root,arrayADD[k]), &Root, externalNode);
-        // }
+        for(int j = 0; j < 1000; j++)
+        {
+            removeRN(searchNode(Root,arrayADD[j], externalNode), &Root, externalNode);
+        }
 
-        // count = 0;
+        count = 0;
 
-        // countNodes(Root, &count, externalNode);
+        countNodes(Root, &count, externalNode);
 
-        // printf("Nos: %d\n", count);
+        printf("Nos: %d\n", count);
 
-        // he = 0; hd = 0;
+        he = 0; hd = 0;
 
-        // checkRN(Root, &he, &hd);
-         
-        // if(he == hd){
-        //     printf("Eh rubro negra!!!\n");
-        // }else{
-        //     printf("Nao eh rubro negra!!!\n");
-        // }
-        
-        // freeRN(Root);
+        checkRN(Root, &he, &hd);
+            
+        if(he == hd){
+            printf("Eh rubro negra!!!\n");
+        }else{
+            printf("Nao eh rubro negra!!!\n");
+        }
+            
+        freeRN(Root, externalNode);
 
-        // printf("%d\n", i);
-
+   }
+   
     return 0;
 }
 
