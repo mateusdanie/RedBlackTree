@@ -1,4 +1,4 @@
-![Banner](https://github.com/mateusdanie/AVL-Work-University/blob/master/AVl%20work%20tree.png)
+![Banner](https://github.com/mateusdanie/RedBlackTree/blob/master/ARN%20work%20tree%20.png)
 
 # Trabalho de implementação de uma árvore rubro negra 
 [![NPM](https://img.shields.io/npm/l/react)](https://github.com/mateusdanie/RedBlackTree/blob/master/LICENSE) 
