@@ -10,52 +10,53 @@ int main()
 {
     RNTree tree = createTree();
     srand(time(NULL));
-    // int *arrayADD = malloc(sizeof(Node) * 10000);
-    // arrayCreate(arrayADD, 10000);
+
+    int *arrayADD = malloc(sizeof(Node) * 10000);
+    arrayCreate(arrayADD, 10000);
 
 
-    // for(int i = 0; i < 1; i++)
-    // {
+    for(int i = 0; i < 1; i++)
+    {
         
-    //     int count = 1, he = 0, hd = 0;
+        int count = 1, he = 0, hd = 0;
         
 
-    //     for(int j = 0; j < 10000; j++)
-    //     {
-    //         insertRN(&tree, arrayADD[j]);
-    //     }
+        for(int j = 0; j < 10000; j++)
+        {
+            insertRN(&tree, arrayADD[j]);
+        }
 
-    //     countNodes(tree.root, &count, tree.external);
-    //     printf("Nos: %d\n", count);
+        countNodes(tree.root, &count, tree.external);
+        printf("Nos: %d\n", count);
 
-    //     checkAVL(tree.root, &he, &hd, tree.external);
+        checkRN(tree.root, &he, &hd, tree);
 
-    //     if(he == hd){
-    //         printf("Eh rubro negra\n");
-    //     }else{
-    //         printf("Nao eh rubro negra\n");
-    //     }
+        if(he == hd){
+            printf("Eh rubro negra\n");
+        }else{
+            printf("Nao eh rubro negra\n");
+        }
 
-    //     for(int j = 0; j < 1000; j++)
-    //     {
-    //         removeRN(&tree, arrayADD[j]);
-    //     }
+        for(int j = 0; j < 1000; j++)
+        {
+            removeRN(&tree, arrayADD[j]);
+        }
 
-    //     count = 1, he = 0, hd = 0;
+        count = 1, he = 0, hd = 0;
 
-    //     countNodes(tree.root, &count, tree.external);
-    //     printf("Nos: %d\n", count);
+        countNodes(tree.root, &count, tree.external);
+        printf("Nos: %d\n", count);
 
-    //     checkRN(tree.root, &he, &hd, tree.external);
+        checkRN(tree.root, &he, &hd, tree);
 
-    //     if(he == hd){
-    //         printf("Eh rubro negra\n");
-    //     }else{
-    //         printf("Nao eh rubro negra\n");
-    //     }
+        if(he == hd){
+            printf("Eh rubro negra\n");
+        }else{
+            printf("Nao eh rubro negra\n");
+        }
 
-    //     freeRN(tree.root, tree.external);
-    // }
+        freeRN(tree.root, tree.external);
+    }
 
 	int *arrayADD = malloc(sizeof(Node) * 100);
     arrayCreate(arrayADD, 100);
